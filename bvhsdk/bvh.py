@@ -152,13 +152,16 @@ def WriteBVH(animation,
 
 
 def GetBVHDataFromFile(path, 
-                       skipmotion=False):
+                       skipmotion=False,
+                       supresswarnings=False):
     """
     Auxiliary function to bvh.ReadFile(), it is not intended to be used by the user. It is the parser of the bvh file.
 
     :param str path: Full path to the bvh file
 
     :param bool skipmotion: If set to True, skip everything after "Frame Time", only the skeleton specification is stored. Default set to False.
+
+    :param bool supresswarnings: If set to True, warnings will not be printed. Default set to False.
 
     :returns: Animation object containing the information from the bvh file.
     :rtype: anim.Animation
@@ -220,8 +223,9 @@ def GetBVHDataFromFile(path,
                         else:
                             print("Invalid Channels order.")
                             raise NotImplementedError
-                        print("WARNING: Channels order %s for Joint %s is not fully implemented yet." % (lastJoint.order, lastJoint.name))
-                        print("bvhsdk only fully supports ZXY order. Use it with caution.")
+                        if not supresswarnings:
+                            print("WARNING: Channels order %s for Joint %s is not fully implemented yet." % (lastJoint.order, lastJoint.name))
+                            print("bvhsdk only fully supports ZXY order. Use it with caution.")
 
                 elif (line.find("Frames")) >= 0:
                     bvhfile.frames = int(line[8:])
@@ -236,7 +240,8 @@ def GetBVHDataFromFile(path,
                     pass
             elif flagMotionDataBegin and not skipmotion:
                 if frame >= bvhfile.frames:
-                    print("WARNING: Number of frames in file is different from declared in file.")
+                    if not supresswarnings:
+                        print("WARNING: Number of frames in file is different from declared in file.")
                     break
                 line = [float(item) for item in line.replace('\n', '').split(' ') if item]
                 i = 0
