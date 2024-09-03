@@ -30,7 +30,11 @@ bvhsdk is a small but versatile Python library designed for the management of BV
 
 ## Featured in
 
-- Tonoli, R. L., Marques, L. B. D. M. M., Ueda, L. H., & Costa, P. P. D. (2023, September). Gesture Generation with Diffusion Models Aided by Speech Activity Information. In GENEA: Generation and Evaluation of Non-verbal Behaviour for Embodied Agents Challenge 2023.
+- Tonoli, R. L., Marques, L. B. D. M. M., Ueda, L. H., & Costa, P. P. D. (2024). Gesture Area Coverage to Assess Gesture Expressiveness and Human-Likeness. In GENEA: Generation and Evaluation of Non-verbal Behaviour for Embodied Agents Workshop 2024.
+
+- Sanchez, J. I. G., Inofuente-Colque, K., Marques, L. B. D. M. M., Costa, P. P. D. & Tonoli, R. L. (2024). Benchmarking Speech-Driven Gesture Generation Models for Generalization to Unseen Voices and Noisy Environments. In GENEA: Generation and Evaluation of Non-verbal Behaviour for Embodied Agents Workshop 2024.
+
+- Tonoli, R. L., Marques, L. B. D. M. M., Ueda, L. H., & Costa, P. P. D. (2023). Gesture Generation with Diffusion Models Aided by Speech Activity Information. In GENEA: Generation and Evaluation of Non-verbal Behaviour for Embodied Agents Challenge 2023.
 
 - Tonoli, R. L. (2019). Motion retargeting preserving spatial relationship: Transferência de movimentos preservando relação espacial (DISSERTAÇÃO Mestre em Engenharia Elétrica). Campinas, SP.
 
