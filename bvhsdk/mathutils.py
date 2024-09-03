@@ -629,6 +629,7 @@ def eulerFromMatrix(matrix, order='ZXY'):
     https://en.wikipedia.org/wiki/Euler_angles#Extrinsic_rotations
     https://gist.github.com/crmccreary/1593090
     https://research.cs.wisc.edu/graphics/Courses/cs-838-1999/Jeff/BVH.html
+    https://www.geometrictools.com/Documentation/EulerAngles.pdf
     NOTE: This function will work only with matrices created using RxRyRz
 
     order = 'XYZ'
@@ -665,6 +666,12 @@ def eulerFromMatrix(matrix, order='ZXY'):
         cos(y)cos(z)    sin(x)sin(y)cos(z)-cos(x)sen(z)   cos(x)sin(y)cos(z)+sen(x)sen(z)
         cos(y)sin(z)    sin(x)sin(y)sin(z)+cos(x)cos(z)   cos(x)sin(y)sin(z)-sen(x)cos(z)
         -sin(y)         sin(x)cos(y)                      cos(x)cos(y)
+
+    order = 'YXZ'
+    ((RyRx)Rz) =
+        cos(y)cos(z)+sen(x)sen(y)sen(z)     cos(z)sen(x)sen(y)-cos(y)sen(z)     cos(x)sen(y)
+        cos(x)sen(z)                        cos(x)cos(z)                        -sen(x)
+        sen(y)cos(z)+sen(x)cos(y)sen(z)     sen(x)cos(y)cos(z)+sen(y)sen(z)     cos(x)cos(y)
 
     :type matrix: numpy.ndarray
     :param matrix: 3x3 rotation matrix or 4x4 transform matrix
@@ -730,6 +737,26 @@ def eulerFromMatrix(matrix, order='ZXY'):
             elif isNear(matrix[2,0],1):
                 y1 = -np.pi/2
                 x1 = np.arctan2(-matrix[0,1], -matrix[0,2])
+
+    elif order == 'YXZ':
+        if not isNear(matrix[1,2],1) and not isNear(matrix[1,2],-1):
+            x1 = np.arcsin(-matrix[1,2])
+            #sin(pi-theta) = sin(theta)
+            #x2 = np.pi - x1
+            y1 = np.arctan2(matrix[0,2]/np.cos(x1),matrix[2,2]/np.cos(x1))
+            #y2 = np.arctan2(matrix[0,2]/np.cos(x2),matrix[2,2]/np.cos(x2))
+            z1 = np.arctan2(matrix[1,0]/np.cos(x1),matrix[1,1]/np.cos(x1))
+            #z2 = np.arctan2(matrix[1,0]/np.cos(x2),matrix[1,1]/np.cos(x2))
+        else:
+            warning = True
+            if isNear(matrix[1,2],-1):
+                x1 = np.pi/2
+                y1 = -np.arctan2(-matrix[0,1], matrix[0,0])
+                z1 = 0
+            elif isNear(matrix[1,2],1):
+                x1 = -np.pi/2
+                y1 = np.arctan2(-matrix[0,1], matrix[0,0])
+                z1 = 0
 
     #TODO: Corrigir
     elif order == 'XYZ':

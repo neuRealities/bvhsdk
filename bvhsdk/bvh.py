@@ -69,6 +69,8 @@ def WriteBVH(animation,
                             file.write(str.format("\tCHANNELS 6 Xposition Yposition Zposition Zrotation Xrotation Yrotation\n"))
                         elif joint.order == 'ZYX':
                             file.write(str.format("\tCHANNELS 6 Xposition Yposition Zposition Zrotation Yrotation Xrotation\n"))
+                        elif joint.order == 'YXZ':
+                            file.write(str.format("\tCHANNELS 6 Xposition Yposition Zposition Yrotation Xrotation Zrotation\n"))
                     else:
                         if endsiteflag:
                             endsiteflag = False
@@ -90,6 +92,8 @@ def WriteBVH(animation,
                             file.write(aux_string + "Zrotation Xrotation Yrotation\n")
                         elif joint.order == 'ZYX':
                             file.write(aux_string + "Zrotation Yrotation Xrotation\n")
+                        elif joint.order == 'YXZ':
+                            file.write(aux_string + "Yrotation Xrotation Zrotation\n")
                         else:
                             print('Order not implemented')
                             raise NotImplementedError
@@ -128,6 +132,8 @@ def WriteBVH(animation,
                             line = line + [joint.tposerot[2], joint.tposerot[0], joint.tposerot[1]]
                         elif joint.order=='ZYX':
                             line = line + [joint.tposerot[2], joint.tposerot[1], joint.tposerot[0]]
+                        elif joint.order=='YXZ':
+                            line = line + [joint.tposerot[1], joint.tposerot[0], joint.tposerot[2]]
                     string = " ".join(str.format("%.{}f".format(precision)%number) for number in line)
                     file.write(string+'\n')
 
@@ -146,6 +152,8 @@ def WriteBVH(animation,
                             line = line + [joint.rotation[frame,2], joint.rotation[frame,0], joint.rotation[frame,1]]
                         elif joint.order=='ZYX':
                             line = line + [joint.rotation[frame,2], joint.rotation[frame,1], joint.rotation[frame,0]]
+                        elif joint.order=='YXZ':
+                            line = line + [joint.rotation[frame,1], joint.rotation[frame,0], joint.rotation[frame,2]]
                     string = " ".join(str.format("%.{}f".format(precision)%number) for number in line)
                     file.write(string+'\n')
     print('File Saved: %s' % (path+'.bvh'))
@@ -220,6 +228,8 @@ def GetBVHDataFromFile(path,
                             lastJoint.order = "XYZ"
                         elif Z < Y and Y < X:
                             lastJoint.order = "ZYX"
+                        elif Y < X and X < Z:
+                            lastJoint.order = "YXZ"
                         else:
                             print("Invalid Channels order.")
                             raise NotImplementedError
@@ -244,14 +254,15 @@ def GetBVHDataFromFile(path,
                         print("WARNING: Number of frames in file is different from declared in file.")
                     break
                 line = [float(item) for item in line.replace('\n', '').split(' ') if item]
-                i = 0
-                for joint in bvhfile.getlistofjoints():
-                    values = line[i:i+len(joint.channels)]
-                    joint.rotation[frame] = np.array( [values[joint.channels['Xrotation']], values[joint.channels['Yrotation']], values[joint.channels['Zrotation']]] )
-                    if len(joint.channels) == 6:
-                        joint.translation[frame] = np.array( [values[joint.channels['Xposition']], values[joint.channels['Yposition']], values[joint.channels['Zposition']]] )
-                    i+=len(joint.channels)
-                frame += 1
+                if len(line) > 0: # Skip empty lines
+                    i = 0
+                    for joint in bvhfile.getlistofjoints():
+                        values = line[i:i+len(joint.channels)]
+                        joint.rotation[frame] = np.array( [values[joint.channels['Xrotation']], values[joint.channels['Yrotation']], values[joint.channels['Zrotation']]] )
+                        if len(joint.channels) == 6:
+                            joint.translation[frame] = np.array( [values[joint.channels['Xposition']], values[joint.channels['Yposition']], values[joint.channels['Zposition']]] )
+                        i+=len(joint.channels)
+                    frame += 1
 
 
     return bvhfile

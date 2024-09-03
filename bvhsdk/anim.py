@@ -467,6 +467,17 @@ class Animation:
                 joint.setLocalRotation(frame, newrot)
             joint.order = newOrder
 
+    def getJointPositions(self):
+        """
+        Get the global position of each joint in each frame.
+
+        :returns: Numpy array with the global position of each joint in each frame.
+        :rtype: numpy.ndarray
+        """
+        joint_positions = []
+        for frame in range(self.frames):
+            joint_positions.append([joint.getPosition(frame) for joint in self.getlistofjoints()])
+        return np.array(joint_positions)
 
 class Joints:
 
@@ -736,6 +747,10 @@ class Joints:
             transform = np.dot(transform, rotz)
             transform = np.dot(transform, roty)
             transform = np.dot(transform, rotx)
+        elif self.order == "YXZ":
+            transform = np.dot(transform, roty)
+            transform = np.dot(transform, rotx)
+            transform = np.dot(transform, rotz)
         return transform
 
     def getLocalTransformBaseRotation(self,
