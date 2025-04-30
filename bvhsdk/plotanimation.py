@@ -1238,8 +1238,14 @@ def MSc_PlotImportance(animation, ego, joint=None):
 
 def set_fonts(family:str = 'serif', serif:str = 'Times New Roman', size:float = 20.0):
     """Set font preferences, if they're available"""
-    print(sorted(fm.get_font_names()))
+    if family in fm.get_font_names():
+        plt.rcParams['font.family'] = family
+    else:
+        print(f"Font {family} not found by matplotlib")
 
-    plt.rcParams['font.family'] = family
-    plt.rcParams["font.serif"] = serif
+    if serif in fm.get_font_names():
+        plt.rcParams['font.serif'] = serif
+    else:
+        print(f"Font {serif} not found by matplotlib")
+    
     plt.rcParams["font.size"] = size
