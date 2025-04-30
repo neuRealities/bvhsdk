@@ -5,8 +5,8 @@ from bvhsdk import mathutils
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams["font.serif"] = "Times New Roman"
+#plt.rcParams['font.family'] = 'serif'
+#plt.rcParams["font.serif"] = "Times New Roman"
 plt.rcParams["font.size"] = 20.0
 
 def plot3d(animation,
