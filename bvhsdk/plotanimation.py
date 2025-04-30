@@ -15,9 +15,10 @@ def plot3d(animation,
            dist = 7,
            figsize = (12,8),
            color = 'black',
-           marker='o', 
-           linestyle='-', 
+           marker='o',
+           linestyle='-',
            markersize=2,
+           verbose=False,
            ):
     """
     Plot BVH animation joints. Currently assumes Y-up character.
@@ -51,7 +52,8 @@ def plot3d(animation,
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d')
 
-    print('Precomputing positions...')
+    if verbose:
+        print('Precomputing positions...')
     precomp_positions = [joint.getPosition(frame) for frame in range(animation.frames) for joint in animation.getlistofjoints()]
     precomp_positions = np.reshape(np.asarray(precomp_positions), newshape = (animation.frames, len(animation.getlistofjoints()), 3))
     # precomp_positions shape: (frames, joints, xyz)
@@ -1236,8 +1238,9 @@ def MSc_PlotImportance(animation, ego, joint=None):
     plt.tight_layout()
     fig.savefig('Importance', dpi=300)
 
-def set_fonts(family:str = 'serif', serif:str = 'Times New Roman', size:float = 20.0):
+def set_fonts(family:str = 'DejaVu Sans', serif:str = 'DejaVu Serif', size:float = 20.0):
     """Set font preferences, if they're available"""
+    plt.rcParams["font.size"] = size
     if family in fm.get_font_names():
         plt.rcParams['font.family'] = family
     else:
@@ -1247,5 +1250,4 @@ def set_fonts(family:str = 'serif', serif:str = 'Times New Roman', size:float = 
         plt.rcParams['font.serif'] = serif
     else:
         print(f"Font {serif} not found by matplotlib")
-    
-    plt.rcParams["font.size"] = size
+
