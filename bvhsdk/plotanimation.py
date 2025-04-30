@@ -1,13 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 from bvhsdk import mathutils
 
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
-
-#plt.rcParams['font.family'] = 'serif'
-#plt.rcParams["font.serif"] = "Times New Roman"
-plt.rcParams["font.size"] = 20.0
 
 def plot3d(animation,
            mode = 'bones',
@@ -1238,3 +1235,11 @@ def MSc_PlotImportance(animation, ego, joint=None):
     ax.legend()
     plt.tight_layout()
     fig.savefig('Importance', dpi=300)
+
+def set_fonts(family:str = 'serif', serif:str = 'Times New Roman', size:float = 20.0):
+    """Set font preferences, if they're available"""
+    print(sorted(fm.get_font_names()))
+
+    plt.rcParams['font.family'] = family
+    plt.rcParams["font.serif"] = serif
+    plt.rcParams["font.size"] = size
